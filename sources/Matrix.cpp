@@ -403,37 +403,42 @@ std::ostream& zich::operator<<(std::ostream &o, const Matrix &matrix){
     return o;
 }
 istream & zich::operator>>(std::istream &o, Matrix &matrix){
-    // input given as '[a b c], [d e f], [g h i]', Where that means 3X3 Matrix
+    /*
+    * input given as '[a b c], [d e f], [g h i]', Where that means 3X3 Matrix. 
+    */
+
     string tmp_str;
     string str;
-    while (getline(o,tmp_str)){
+    while ( getline(o , tmp_str)) {
         str += tmp_str;   
     }
     check_valid_string(str);
     int col = 0;
     int row = 0;
     for(size_t i=0; i<str.size(); i++){
-        if(str[i]==']'){
+        if(str[i] == ']'){
             row++;
         }
     }
-    size_t spaces=0;
+
+    size_t spaces = 0;
     size_t index = 0;
     tmp_str = "";
+
     for(size_t i=0; i<str.size();i++){
         if(str[i] != '[' && str[i] != ']'){
             tmp_str.push_back(str[i]);
         }
     }
-    char ch =0 ;
-    // unsigned int tmp = 0;
+    char ch = 0;
+
     while(ch != ','){
-        ch=tmp_str[index++];
-        if(ch==' '){
+        ch = tmp_str[index++];
+        if(ch == ' '){
             spaces++;
         }
     }
-    // tmp = spaces + 1;
+
     str = "";
     for(size_t i=0; i<tmp_str.size(); i++){
         if(tmp_str[i] != ',')
@@ -444,33 +449,32 @@ istream & zich::operator>>(std::istream &o, Matrix &matrix){
     string delimiter = " ";
     vector<double> arr;
     index = 0;
-    size_t size =1;
+    size_t size = 1;
     arr.resize(size++);
-    while( arr.size() > 1) {
+    
+    while(arr.size() > 1) {
         string token = str.substr(0,str.find(delimiter));
-        arr[index++]=stod(token);
+        arr[index++] = stod(token);
         arr.resize(size++);
         str.erase(0, str.find(delimiter) + delimiter.length());
     }
 
-    arr[index++]=stod(str);
-
+    arr[index++] = stod(str);
 
     matrix.mat = new double*[(size_t)row];
-
     
     for(size_t i=0; i<row; i++){
         matrix.mat[i] = new double[(size_t)col];
     }
+
     matrix.colums = col;
     matrix.rows = row;
-    index=0;
+    index = 0;
 
     for(size_t i = 0; i<col; i++){
         for(size_t j = 0; j<row; j++){
-            matrix.mat[i][j]=arr[index++];
+            matrix.mat[i][j] = arr[index++];
         }
     }
-
     return o;
 }
